@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "test_running",
+				"fileName": "Filter Activity (1).txt",
 				"folderPath": "input",
 				"fileSystem": "datafiles"
 			},
