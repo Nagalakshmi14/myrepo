@@ -1,5 +1,5 @@
 {
-	"name": "ds_output_copy1",
+	"name": "ds_running_test",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureDataLakeStorage1",
@@ -10,7 +10,8 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"folderPath": "output",
+				"fileName": "test_running",
+				"folderPath": "input",
 				"fileSystem": "datafiles"
 			},
 			"columnDelimiter": ",",
@@ -18,6 +19,27 @@
 			"firstRowAsHeader": true,
 			"quoteChar": "\""
 		},
-		"schema": []
+		"schema": [
+			{
+				"name": "DepartmentNO",
+				"type": "String"
+			},
+			{
+				"name": "DNAME",
+				"type": "String"
+			},
+			{
+				"name": "LOC",
+				"type": "String"
+			},
+			{
+				"name": "quantity",
+				"type": "String"
+			},
+			{
+				"name": "runningtotal",
+				"type": "String"
+			}
+		]
 	}
 }
