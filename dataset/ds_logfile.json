@@ -1,12 +1,12 @@
 {
-	"name": "logfile_append",
+	"name": "ds_logfile",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureDataLakeStorage1",
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
-			"logfilename": {
+			"logFileName": {
 				"type": "string"
 			}
 		},
@@ -15,8 +15,11 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "Filter Activity (1).txt",
-				"folderPath": "input",
+				"fileName": {
+					"value": "@dataset().logFileName",
+					"type": "Expression"
+				},
+				"folderPath": "log",
 				"fileSystem": "datafiles"
 			},
 			"columnDelimiter": ",",
@@ -24,27 +27,6 @@
 			"firstRowAsHeader": true,
 			"quoteChar": "\""
 		},
-		"schema": [
-			{
-				"name": "DepartmentNO",
-				"type": "String"
-			},
-			{
-				"name": "DNAME",
-				"type": "String"
-			},
-			{
-				"name": "LOC",
-				"type": "String"
-			},
-			{
-				"name": "quantity",
-				"type": "String"
-			},
-			{
-				"name": "runningtotal",
-				"type": "String"
-			}
-		]
+		"schema": []
 	}
 }
