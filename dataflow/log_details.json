@@ -5,17 +5,9 @@
 		"typeProperties": {
 			"sources": [
 				{
-					"dataset": {
-						"referenceName": "logfile_append",
-						"type": "DatasetReference"
-					},
 					"name": "dummy"
 				},
 				{
-					"dataset": {
-						"referenceName": "ds_logfile",
-						"type": "DatasetReference"
-					},
 					"name": "log"
 				}
 			],
@@ -57,11 +49,9 @@
 				"          runningtotal as string",
 				"     ),",
 				"     allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> dummy",
+				"     validateSchema: false) ~> dummy",
 				"source(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> log",
+				"     validateSchema: false) ~> log",
 				"dummy derive(ADFName = $ADFName,",
 				"          PipelineName = $PipelineName,",
 				"          Status = $Status,",

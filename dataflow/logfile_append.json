@@ -5,17 +5,9 @@
 		"typeProperties": {
 			"sources": [
 				{
-					"dataset": {
-						"referenceName": "logfile_append",
-						"type": "DatasetReference"
-					},
 					"name": "dummy"
 				},
 				{
-					"dataset": {
-						"referenceName": "ds_logfile",
-						"type": "DatasetReference"
-					},
 					"name": "log"
 				}
 			],
@@ -58,11 +50,9 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     inferDriftedColumnTypes: true,",
-				"     ignoreNoFilesFound: false,",
 				"     wildcardPaths:[('/log'+$logFileName)]) ~> dummy",
 				"source(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false,",
 				"     wildcardPaths:[($logFileName)]) ~> log",
 				"dummy derive(ADFName = $ADFName,",
 				"          PipelineName = $PipelineName,",
