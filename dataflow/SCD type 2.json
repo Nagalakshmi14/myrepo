@@ -10,6 +10,13 @@
 						"type": "DatasetReference"
 					},
 					"name": "source1"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_empDetailss",
+						"type": "DatasetReference"
+					},
+					"name": "source2"
 				}
 			],
 			"sinks": [
@@ -19,6 +26,13 @@
 						"type": "DatasetReference"
 					},
 					"name": "sink1"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_empDetailss",
+						"type": "DatasetReference"
+					},
+					"name": "sink2"
 				}
 			],
 			"transformations": [
@@ -29,7 +43,22 @@
 					"name": "surrogateKey1"
 				},
 				{
-					"name": "select1"
+					"name": "select2"
+				},
+				{
+					"name": "lookup1"
+				},
+				{
+					"name": "existingRows"
+				},
+				{
+					"name": "onlySQLRows"
+				},
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "updaterows"
 				}
 			],
 			"scriptLines": [
@@ -42,18 +71,49 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> source1",
+				"source(output(",
+				"          surrogate as integer,",
+				"          empid as integer,",
+				"          empname as string,",
+				"          gender as string,",
+				"          country as string,",
+				"          isActive as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> source2",
 				"source1 derive(isActive = 1) ~> isactive",
 				"isactive keyGenerate(output(empid as long),",
 				"     startAt: 1L,",
 				"     stepValue: 1L) ~> surrogateKey1",
-				" select(mapColumn(",
-				"          CustomerKey,",
-				"          CustomerName,",
-				"          Date,",
-				"          Filename",
+				"source2 select(mapColumn(",
+				"          SQL_surrogate = surrogate,",
+				"          SQL_empid = empid,",
+				"          SQL_empname = empname,",
+				"          SQL_gender = gender,",
+				"          SQL_country = country,",
+				"          SQLisActive = isActive",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> select1",
+				"     skipDuplicateMapOutputs: true) ~> select2",
+				"source1, select2 lookup(empid == SQL_empid,",
+				"     multiple: false,",
+				"     pickup: 'any',",
+				"     broadcast: 'auto')~> lookup1",
+				"lookup1 filter(!isNull(SQL_empid)) ~> existingRows",
+				"existingRows select(mapColumn(",
+				"          SQL_surrogate,",
+				"          SQL_empid,",
+				"          SQL_empname,",
+				"          SQL_gender,",
+				"          SQL_country,",
+				"          SQLisActive",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> onlySQLRows",
+				"onlySQLRows derive(SQL_isActive = 0) ~> derivedColumn1",
+				"derivedColumn1 alterRow(updateIf(1==1)) ~> updaterows",
 				"surrogateKey1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
@@ -69,7 +129,26 @@
 				"     format: 'table',",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink1",
+				"updaterows sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          surrogate as integer,",
+				"          empid as integer,",
+				"          empname as string,",
+				"          gender as string,",
+				"          country as string,",
+				"          isActive as integer",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:false,",
+				"     updateable:true,",
+				"     upsertable:false,",
+				"     keys:['SQL_surrogate'],",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink2"
 			]
 		}
 	}
