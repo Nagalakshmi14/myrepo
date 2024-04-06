@@ -1,5 +1,5 @@
 {
-	"name": "ds_employee",
+	"name": "ds_input",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureDataLakeStorage1",
@@ -10,7 +10,6 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "employee.csv",
 				"folderPath": "input",
 				"fileSystem": "datafiles"
 			},
