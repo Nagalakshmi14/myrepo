@@ -5,33 +5,17 @@
 		"typeProperties": {
 			"sources": [
 				{
-					"dataset": {
-						"referenceName": "ds_empdetails",
-						"type": "DatasetReference"
-					},
 					"name": "source1"
 				},
 				{
-					"dataset": {
-						"referenceName": "ds_empDetailss",
-						"type": "DatasetReference"
-					},
 					"name": "source2"
 				}
 			],
 			"sinks": [
 				{
-					"dataset": {
-						"referenceName": "AzureSqlTable1",
-						"type": "DatasetReference"
-					},
 					"name": "sink1"
 				},
 				{
-					"dataset": {
-						"referenceName": "ds_empDetailss",
-						"type": "DatasetReference"
-					},
 					"name": "sink2"
 				}
 			],
@@ -69,8 +53,7 @@
 				"          country as string",
 				"     ),",
 				"     allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> source1",
+				"     validateSchema: false) ~> source1",
 				"source(output(",
 				"          surrogate as integer,",
 				"          empid as integer,",
@@ -80,9 +63,7 @@
 				"          isActive as integer",
 				"     ),",
 				"     allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     isolationLevel: 'READ_UNCOMMITTED',",
-				"     format: 'table') ~> source2",
+				"     validateSchema: false) ~> source2",
 				"source1 derive(isActive = 1) ~> isactive",
 				"isactive keyGenerate(output(empid as long),",
 				"     startAt: 1L,",
@@ -116,41 +97,16 @@
 				"derivedColumn1 alterRow(updateIf(1==1)) ~> updaterows",
 				"surrogateKey1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     input(",
-				"          CustomerKey as string,",
-				"          CustomerName as string,",
-				"          Date as date,",
-				"          Filename as string",
-				"     ),",
-				"     deletable:false,",
-				"     insertable:true,",
-				"     updateable:false,",
-				"     upsertable:false,",
-				"     format: 'table',",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
 				"     saveOrder: 2,",
-				"     errorHandlingOption: 'stopOnFirstError') ~> sink1",
+				"     format: 'table') ~> sink1",
 				"updaterows sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     input(",
-				"          surrogate as integer,",
-				"          empid as integer,",
-				"          empname as string,",
-				"          gender as string,",
-				"          country as string,",
-				"          isActive as integer",
-				"     ),",
-				"     deletable:false,",
-				"     insertable:false,",
-				"     updateable:true,",
-				"     upsertable:false,",
-				"     keys:['SQL_surrogate'],",
-				"     format: 'table',",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
 				"     saveOrder: 1,",
-				"     errorHandlingOption: 'stopOnFirstError') ~> sink2"
+				"     format: 'table') ~> sink2"
 			]
 		}
 	}

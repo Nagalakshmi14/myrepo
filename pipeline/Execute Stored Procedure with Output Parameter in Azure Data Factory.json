@@ -20,10 +20,6 @@
 						"sqlReaderQuery": "declare @empidtotal int\nexecute sp_dept1 'M',@empidtotal output\nselect @empidtotal as empidtotal",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
-					},
-					"dataset": {
-						"referenceName": "AzureSqlTable1",
-						"type": "DatasetReference"
 					}
 				}
 			}
