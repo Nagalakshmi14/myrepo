@@ -1,0 +1,9 @@
+{
+	"name": "nagaadakla",
+	"location": "centralindia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "b3b0bcb2-428d-48c7-b95a-8018433dfd3c",
+		"tenantId": "cb27cd7f-ff50-466d-bd95-44b7651d4ec2"
+	}
+}
