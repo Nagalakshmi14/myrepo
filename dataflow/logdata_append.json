@@ -1,0 +1,93 @@
+{
+	"name": "logdata_append",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_dummy",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_append_log",
+						"type": "DatasetReference"
+					},
+					"name": "source2"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_log_output",
+						"type": "DatasetReference"
+					},
+					"name": "sink1",
+					"rejectedDataLinkedService": {
+						"referenceName": "AzureDataLakeStorage1",
+						"type": "LinkedServiceReference"
+					}
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "select1"
+				},
+				{
+					"name": "union1"
+				}
+			],
+			"scriptLines": [
+				"parameters{",
+				"     ADFName as string,",
+				"     PipelineNme as string,",
+				"     Status as string,",
+				"     Runid as string,",
+				"     TriggerName as string,",
+				"     LogFilename as string",
+				"}",
+				"source(output(",
+				"          Column_1 as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     wildcardPaths:[('log/'+$LogFilename)]) ~> source2",
+				"source1 derive(ADFName = $ADFName,",
+				"          PipelineNme = $PipelineNme,",
+				"          Status = $Status,",
+				"          Runid = $Runid,",
+				"          TriggerName = $TriggerName,",
+				"          LogFilename = $LogFilename) ~> derivedColumn1",
+				"derivedColumn1 select(mapColumn(",
+				"          ADFName,",
+				"          PipelineNme,",
+				"          Status,",
+				"          Runid,",
+				"          TriggerName",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1, source2 union(byName: true)~> union1",
+				"union1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:[($LogFilename)],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
+			]
+		}
+	}
+}
