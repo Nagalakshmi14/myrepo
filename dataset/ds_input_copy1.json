@@ -1,5 +1,5 @@
 {
-	"name": "ds_input",
+	"name": "ds_input_copy1",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureDataLakeStorage1",
@@ -10,6 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
+				"fileName": "Process fixed length.txt",
 				"folderPath": "example",
 				"fileSystem": "datafiles"
 			},

@@ -1,5 +1,5 @@
 {
-	"name": "ds_input",
+	"name": "DelimitedText1",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureDataLakeStorage1",
@@ -10,6 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
+				"fileName": "Process fixed length.txt",
 				"folderPath": "example",
 				"fileSystem": "datafiles"
 			},
@@ -20,15 +21,7 @@
 		},
 		"schema": [
 			{
-				"name": "DepartmentNO",
-				"type": "String"
-			},
-			{
-				"name": "DNAME",
-				"type": "String"
-			},
-			{
-				"name": "LOC",
+				"name": "7369SMITH     AP9502858241",
 				"type": "String"
 			}
 		]
